@@ -27,4 +27,14 @@ def generate_insights(data_path="data/cleaned_mobility_data.csv"):
         errorbar=None,
         palette=["#2b5cff", "#ff6b4a"]
     )
+    plt.title("Total Footfall by Time Slot (Weekday vs. Weekend)")
+    plt.xlabel("Time Window")
+    plt.ylabel("Total Observed Footfall")
+    plt.legend(title="Is Weekend")
+    plt.tight_layout()
+    plt.savefig("reports/footfall_by_timeslot.png", dpi=300)
+    plt.close()
+
+    # 3. Generate Dwell Time Distribution by Category
+    plt.figure(figsize=(10, 5))
    
