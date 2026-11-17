@@ -37,4 +37,15 @@ def generate_insights(data_path="data/cleaned_mobility_data.csv"):
 
     # 3. Generate Dwell Time Distribution by Category
     plt.figure(figsize=(10, 5))
-   
+    sns.boxplot(data=df, x="category", y="dwell_time_mins", palette="viridis")
+    plt.title("Customer Dwell Time Distribution Across Retail Categories")
+    plt.xlabel("Retail Category")
+    plt.ylabel("Dwell Time (Minutes)")
+    plt.tight_layout()
+    plt.savefig("reports/dwell_time_distribution.png", dpi=300)
+    plt.close()
+
+    print("\nCharts saved to reports/footfall_by_timeslot.png and reports/dwell_time_distribution.png")
+
+if __name__ == "__main__":
+    generate_insights()
