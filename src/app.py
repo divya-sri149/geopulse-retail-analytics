@@ -1,4 +1,3 @@
-# src/app.py
 import streamlit as st
 import pandas as pd
 import folium
@@ -7,29 +6,41 @@ from streamlit_folium import st_folium
 st.set_page_config(page_title="GeoPulse Analytics", layout="wide")
 
 st.title("GeoPulse: Hyper-Local Retail Mobility Analytics")
-st.markdown("Real-time footfall patterns, dwell times, and spatial visitor distribution across store locations.")
+st.markdown("Footfall patterns, dwell times, and spatial visitor distribution across retail locations.")
 
 @st.cache_data
 def load_data():
-    df = pd.read_csv("data/retail_mobility_data.csv")
+    try:
+        df = pd.read_csv("data/cleaned_mobility_data.csv")
+    except FileNotFoundError:
+        df = pd.read_csv("data/retail_mobility_data.csv")
     df["timestamp"] = pd.to_datetime(df["timestamp"])
+    if "day_of_week" not in df.columns:
+        df["day_of_week"] = df["timestamp"].dt.day_name()
     return df
 
 try:
     df = load_data()
 except Exception:
-    st.error("Dataset not found. Please run `python src/generate_data.py` first.")
+    st.error("Dataset not found. Run `python src/generate_data.py` and `python src/data_cleaner.py` first.")
     st.stop()
 
-# Sidebar Filters
+# Sidebar Filters & Data Export
 st.sidebar.header("Filter Criteria")
 categories = ["All"] + sorted(df["category"].unique().tolist())
 selected_category = st.sidebar.selectbox("Retail Category", categories)
 
-if selected_category != "All":
-    filtered_df = df[df["category"] == selected_category]
-else:
-    filtered_df = df
+filtered_df = df if selected_category == "All" else df[df["category"] == selected_category]
+
+st.sidebar.markdown("---")
+st.sidebar.subheader("Export Report")
+csv_data = filtered_df.to_csv(index=False).encode("utf-8")
+st.sidebar.download_button(
+    label="Download Filtered CSV",
+    data=csv_data,
+    file_name=f"geopulse_{selected_category.lower()}_report.csv",
+    mime="text/csv"
+)
 
 # KPI Metrics
 col1, col2, col3, col4 = st.columns(4)
@@ -40,25 +51,23 @@ col4.metric("Peak Activity Hour", f"{filtered_df['timestamp'].dt.hour.mode()[0]}
 
 # Spatial Map
 st.subheader("Hyper-Local Footprint Map")
-center_lat = filtered_df["latitude"].mean()
-center_lon = filtered_df["longitude"].mean()
-m = folium.Map(location=[center_lat, center_lon], zoom_start=12, tiles="CartoDB positron")
+m = folium.Map(
+    location=[filtered_df["latitude"].mean(), filtered_df["longitude"].mean()],
+    zoom_start=12,
+    tiles="CartoDB positron"
+)
 
-for _, row in filtered_df.groupby(["store_name", "category", "latitude", "longitude"])["footfall"].sum().reset_index().iterrows():
+store_geo = filtered_df.groupby(["store_name", "category", "latitude", "longitude"])["footfall"].sum().reset_index()
+for _, row in store_geo.iterrows():
     folium.CircleMarker(
         location=[row["latitude"], row["longitude"]],
         radius=min(max(row["footfall"] / 100, 6), 25),
-        popup=f"<b>{row['store_name']}</b><br>Footfall: {row['footfall']}",
+        popup=f"<b>{row['store_name']}</b><br>Category: {row['category']}<br>Footfall: {row['footfall']}",
         color="#2b5cff",
         fill=True,
         fill_opacity=0.6
     ).add_to(m)
 
-st_folium(m, width=1100, height=450)
+st_folium(m, width=1100, height=420)
 
-# Aggregated Visualizations
-st.subheader("Hourly Footfall Trend")
-hourly_trends = filtered_df.copy()
-hourly_trends["hour"] = hourly_trends["timestamp"].dt.hour
-chart_data = hourly_trends.groupby("hour")["footfall"].sum()
-st.bar_chart(chart_data)
+# Two-Column Analytical Breakdown
