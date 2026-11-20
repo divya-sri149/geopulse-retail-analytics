@@ -71,3 +71,26 @@ for _, row in store_geo.iterrows():
 st_folium(m, width=1100, height=420)
 
 # Two-Column Analytical Breakdown
+left_col, right_col = st.columns(2)
+
+with left_col:
+    st.subheader("Hourly Footfall Trend")
+    hourly_trends = filtered_df.copy()
+    hourly_trends["hour"] = hourly_trends["timestamp"].dt.hour
+    st.bar_chart(hourly_trends.groupby("hour")["footfall"].sum())
+
+with right_col:
+    st.subheader("Day-of-Week Traffic Distribution")
+    day_order = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    daily_traffic = filtered_df.groupby("day_of_week")["footfall"].sum().reindex(day_order).fillna(0)
+    st.bar_chart(daily_traffic)
+
+# Store Leaderboard Table
+st.subheader("Store Performance Summary")
+leaderboard = filtered_df.groupby(["store_id", "store_name", "category"]).agg(
+    Total_Footfall=("footfall", "sum"),
+    Avg_Dwell_Mins=("dwell_time_mins", "mean"),
+    Total_Records=("footfall", "count")
+).reset_index().sort_values(by="Total_Footfall", ascending=False)
+leaderboard["Avg_Dwell_Mins"] = leaderboard["Avg_Dwell_Mins"].round(1)
+st.dataframe(leaderboard, use_container_width=True, hide_index=True)
