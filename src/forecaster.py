@@ -27,4 +27,23 @@ def generate_footfall_forecast(data_path="data/cleaned_mobility_data.csv", outpu
     forecast_records = []
     np.random.seed(42)
 
-   
+    for day_offset in range(1, forecast_days + 1):
+        target_date = last_date + timedelta(days=day_offset)
+        target_dow = target_date.day_name()
+
+        for _, store in stores.iterrows():
+            match = dow_profile[
+                (dow_profile["store_id"] == store["store_id"]) &
+                (dow_profile["day_of_week"] == target_dow)
+            ]
+            if not match.empty:
+                base_val = match["baseline_footfall"].values[0]
+                dwell_val = match["expected_dwell"].values[0]
+            else:
+                base_val = daily_store[daily_store["store_id"] == store["store_id"]]["daily_footfall"].mean()
+                dwell_val = daily_store[daily_store["store_id"] == store["store_id"]]["avg_dwell"].mean()
+
+            # Apply slight realistic variance (+/- 5%)
+            predicted = int(round(base_val * np.random.uniform(0.95, 1.05)))
+            lower_bound = int(round(predicted * 0.90))
+            upper_bound = int(round(predicted * 1.10))
