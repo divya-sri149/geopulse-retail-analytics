@@ -47,3 +47,23 @@ def generate_footfall_forecast(data_path="data/cleaned_mobility_data.csv", outpu
             predicted = int(round(base_val * np.random.uniform(0.95, 1.05)))
             lower_bound = int(round(predicted * 0.90))
             upper_bound = int(round(predicted * 1.10))
+
+            forecast_records.append({
+                "forecast_date": target_date.strftime("%Y-%m-%d"),
+                "day_of_week": target_dow,
+                "store_id": store["store_id"],
+                "store_name": store["store_name"],
+                "category": store["category"],
+                "predicted_footfall": predicted,
+                "confidence_low": lower_bound,
+                "confidence_high": upper_bound,
+                "expected_dwell_mins": round(dwell_val, 1)
+            })
+
+    forecast_df = pd.DataFrame(forecast_records)
+    forecast_df.to_csv(output_path, index=False)
+    print(f"7-Day Footfall Forecast generated: {output_path} ({len(forecast_df)} records)")
+    return forecast_df
+
+if __name__ == "__main__":
+    generate_footfall_forecast()
