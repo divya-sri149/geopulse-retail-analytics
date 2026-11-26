@@ -54,7 +54,7 @@ st.subheader("Hyper-Local Footprint Map")
 m = folium.Map(
     location=[filtered_df["latitude"].mean(), filtered_df["longitude"].mean()],
     zoom_start=12,
-    tiles="CartoDB positron"
+    tiles="OpenStreetMap"
 )
 
 store_geo = filtered_df.groupby(["store_name", "category", "latitude", "longitude"])["footfall"].sum().reset_index()
