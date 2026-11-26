@@ -94,3 +94,16 @@ leaderboard = filtered_df.groupby(["store_id", "store_name", "category"]).agg(
 ).reset_index().sort_values(by="Total_Footfall", ascending=False)
 leaderboard["Avg_Dwell_Mins"] = leaderboard["Avg_Dwell_Mins"].round(1)
 st.dataframe(leaderboard, use_container_width=True, hide_index=True)
+# 7-Day Footfall Forecast Section
+st.markdown("---")
+st.subheader("7-Day Footfall Forecast")
+try:
+    forecast_df = pd.read_csv("data/footfall_forecast.csv")
+    if selected_category != "All":
+        forecast_df = forecast_df[forecast_df["category"] == selected_category]
+    
+    daily_forecast = forecast_df.groupby("forecast_date")["predicted_footfall"].sum()
+    st.line_chart(daily_forecast)
+    st.dataframe(forecast_df, use_container_width=True, hide_index=True)
+except FileNotFoundError:
+    st.info("Run `py -3.11 src/forecaster.py` to generate 7-day footfall predictions.")

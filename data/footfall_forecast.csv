@@ -1,0 +1,29 @@
+forecast_date,day_of_week,store_id,store_name,category,predicted_footfall,confidence_low,confidence_high,expected_dwell_mins
+2026-11-27,Friday,LOC_01,Downtown Flagship,Apparel,722,650,794,30.2
+2026-11-27,Friday,LOC_02,Metro Mall Hub,Electronics,604,544,664,27.6
+2026-11-27,Friday,LOC_03,Suburban Express,Grocery,440,396,484,26.3
+2026-11-27,Friday,LOC_04,High Street Outlet,Dining,518,466,570,31.6
+2026-11-28,Saturday,LOC_01,Downtown Flagship,Apparel,414,373,455,26.1
+2026-11-28,Saturday,LOC_02,Metro Mall Hub,Electronics,402,362,442,21.9
+2026-11-28,Saturday,LOC_03,Suburban Express,Grocery,417,375,459,25.9
+2026-11-28,Saturday,LOC_04,High Street Outlet,Dining,709,638,780,23.8
+2026-11-29,Sunday,LOC_01,Downtown Flagship,Apparel,706,635,777,28.0
+2026-11-29,Sunday,LOC_02,Metro Mall Hub,Electronics,691,622,760,24.7
+2026-11-29,Sunday,LOC_03,Suburban Express,Grocery,511,460,562,35.4
+2026-11-29,Sunday,LOC_04,High Street Outlet,Dining,432,389,475,37.0
+2026-11-30,Monday,LOC_01,Downtown Flagship,Apparel,532,479,585,27.2
+2026-11-30,Monday,LOC_02,Metro Mall Hub,Electronics,636,572,700,32.8
+2026-11-30,Monday,LOC_03,Suburban Express,Grocery,470,423,517,25.3
+2026-11-30,Monday,LOC_04,High Street Outlet,Dining,462,416,508,30.5
+2026-12-01,Tuesday,LOC_01,Downtown Flagship,Apparel,505,454,556,30.3
+2026-12-01,Tuesday,LOC_02,Metro Mall Hub,Electronics,586,527,645,32.8
+2026-12-01,Tuesday,LOC_03,Suburban Express,Grocery,488,439,537,28.7
+2026-12-01,Tuesday,LOC_04,High Street Outlet,Dining,549,494,604,29.7
+2026-12-02,Wednesday,LOC_01,Downtown Flagship,Apparel,544,490,598,23.5
+2026-12-02,Wednesday,LOC_02,Metro Mall Hub,Electronics,481,433,529,33.2
+2026-12-02,Wednesday,LOC_03,Suburban Express,Grocery,537,483,591,29.7
+2026-12-02,Wednesday,LOC_04,High Street Outlet,Dining,551,496,606,38.4
+2026-12-03,Thursday,LOC_01,Downtown Flagship,Apparel,510,459,561,29.9
+2026-12-03,Thursday,LOC_02,Metro Mall Hub,Electronics,724,652,796,31.9
+2026-12-03,Thursday,LOC_03,Suburban Express,Grocery,387,348,426,28.4
+2026-12-03,Thursday,LOC_04,High Street Outlet,Dining,525,472,578,21.0
