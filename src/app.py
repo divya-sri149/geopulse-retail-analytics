@@ -94,6 +94,10 @@ leaderboard = filtered_df.groupby(["store_id", "store_name", "category"]).agg(
 ).reset_index().sort_values(by="Total_Footfall", ascending=False)
 leaderboard["Avg_Dwell_Mins"] = leaderboard["Avg_Dwell_Mins"].round(1)
 st.dataframe(leaderboard, use_container_width=True, hide_index=True)
+# Average Dwell Time by Store Chart
+st.subheader("Average Dwell Time by Store (Minutes)")
+dwell_chart_data = leaderboard.set_index("store_name")["Avg_Dwell_Mins"]
+st.bar_chart(dwell_chart_data)
 # 7-Day Footfall Forecast Section
 st.markdown("---")
 st.subheader("7-Day Footfall Forecast")
